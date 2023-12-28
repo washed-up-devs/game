@@ -32,11 +32,14 @@ pub fn map_init(
         map_config.as_mut().map_scene_root = Some(
             commands
                 .spawn((
-                    ColliderFromMesh { gltf_handle: map_gltf, },
+                    ColliderFromMesh {
+                        gltf_handle: map_gltf,
+                    },
                     SceneBundle {
                         scene: map_scene,
                         ..Default::default()
-                    }))
+                    },
+                ))
                 .id(),
         );
         *ambient_light = AmbientLight {

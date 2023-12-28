@@ -1,7 +1,7 @@
 use std::f32::consts::TAU;
 
 use crate::fps_controller::*;
-use bevy::{prelude::*, math::vec3};
+use bevy::{math::vec3, prelude::*};
 use bevy_rapier3d::prelude::*;
 
 pub fn player_init(mut commands: Commands) {

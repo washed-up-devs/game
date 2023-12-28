@@ -1,6 +1,6 @@
 #![feature(iter_array_chunks)]
 
-use bevy::{prelude::*, scene::scene_spawner};
+use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 use clap::{Parser, Subcommand};
 
@@ -27,7 +27,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .add_plugins((
                 DefaultPlugins,
                 RapierPhysicsPlugin::<NoUserData>::default(),
-                RapierDebugRenderPlugin::default(),
                 fps_controller::FpsControllerPlugin,
                 #[cfg(feature = "editor")]
                 bevy_editor_pls::EditorPlugin::default(),
