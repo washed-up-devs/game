@@ -1,13 +1,13 @@
 use bevy::prelude::*;
 use clap::{Parser, Subcommand};
 
+mod map;
+
 #[derive(Parser)]
 struct Cli {
     #[command(subcommand)]
     command: Option<Command>,
 }
-
-mod map;
 
 #[derive(Debug, Default, Subcommand)]
 enum Command {
@@ -19,7 +19,15 @@ enum Command {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     match Cli::parse().command.unwrap_or_default() {
         Command::Launch => App::new()
-            .add_plugins(DefaultPlugins)
+            .add_plugins((
+                DefaultPlugins,
+                #[cfg(feature = "editor")]
+                bevy_editor_pls::EditorPlugin::default(),
+            ))
+            .insert_resource(map::MapConfig {
+                path: "levels/test_movement.glb".into(),
+                map_scene_root: None,
+            })
             .add_systems(Update, map::map_init)
             .run(),
         Command::Update => {
