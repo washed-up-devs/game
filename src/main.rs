@@ -28,7 +28,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 DefaultPlugins,
                 RapierPhysicsPlugin::<NoUserData>::default(),
                 fps_controller::FpsControllerPlugin,
-                #[cfg(feature = "editor")]
+                #[cfg(debug_assertions)]
                 bevy_editor_pls::EditorPlugin::default(),
             ))
             .insert_resource(RapierConfiguration::default())
