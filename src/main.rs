@@ -1,17 +1,23 @@
 use bevy::prelude::*;
-use clap::Parser;
+use clap::{Parser, Subcommand};
 
-#[derive(Debug, Default, Parser)]
-enum Cli {
+#[derive(Parser)]
+struct Cli {
+    #[command(subcommand)]
+    command: Option<Command>
+}
+
+#[derive(Debug, Default, Subcommand)]
+enum Command {
     #[default]
     Launch,
     Update,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    match Cli::parse() {
-        Cli::Launch => App::new().add_plugins(DefaultPlugins).run(),
-        Cli::Update => {
+    match Cli::parse().command.unwrap_or_default() {
+        Command::Launch => App::new().add_plugins(DefaultPlugins).run(),
+        Command::Update => {
             let status = self_update::backends::github::Update::configure()
                 .repo_owner("washed-up-devs")
                 .repo_name(env!("CARGO_PKG_NAME"))
