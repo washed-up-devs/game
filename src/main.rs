@@ -4,8 +4,10 @@ use clap::{Parser, Subcommand};
 #[derive(Parser)]
 struct Cli {
     #[command(subcommand)]
-    command: Option<Command>
+    command: Option<Command>,
 }
+
+mod map;
 
 #[derive(Debug, Default, Subcommand)]
 enum Command {
@@ -16,7 +18,10 @@ enum Command {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     match Cli::parse().command.unwrap_or_default() {
-        Command::Launch => App::new().add_plugins(DefaultPlugins).run(),
+        Command::Launch => App::new()
+            .add_plugins(DefaultPlugins)
+            .add_systems(Update, map::map_init)
+            .run(),
         Command::Update => {
             let status = self_update::backends::github::Update::configure()
                 .repo_owner("washed-up-devs")

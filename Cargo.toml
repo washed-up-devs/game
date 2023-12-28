@@ -8,6 +8,9 @@ bevy = "0.12.1"
 clap = { version = "4.4.11", features = ["derive"] }
 self_update = "0.39.0"
 
+[dev-dependencies]
+bevy_editor_pls = "0.7.0"
+
 [features]
 default = ["debug"]
 debug = ["bevy/dynamic_linking"]
