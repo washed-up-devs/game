@@ -1,5 +1,5 @@
 [package]
-name = "game-template"
+name = "game"
 version = "0.2.8"
 edition = "2021"
 
