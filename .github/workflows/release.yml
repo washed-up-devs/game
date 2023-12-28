@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Create release
         shell: bash
@@ -30,7 +32,6 @@ jobs:
       - name: Commit changes
         shell: bash
         run: |
-          git remote set-head origin --auto
           git config --global user.name 'Chay Nabors'
           git config --global user.email 'chaynabors@users.noreply.github.com'
           git commit -am "bump version"
