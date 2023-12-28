@@ -1,7 +1,12 @@
-use bevy::prelude::*;
+#![feature(iter_array_chunks)]
+
+use bevy::{prelude::*, scene::scene_spawner};
+use bevy_rapier3d::prelude::*;
 use clap::{Parser, Subcommand};
 
+mod fps_controller;
 mod map;
+mod player;
 
 #[derive(Parser)]
 struct Cli {
@@ -21,14 +26,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         Command::Launch => App::new()
             .add_plugins((
                 DefaultPlugins,
+                RapierPhysicsPlugin::<NoUserData>::default(),
+                RapierDebugRenderPlugin::default(),
+                fps_controller::FpsControllerPlugin,
                 #[cfg(feature = "editor")]
                 bevy_editor_pls::EditorPlugin::default(),
             ))
+            .insert_resource(RapierConfiguration::default())
             .insert_resource(map::MapConfig {
                 path: "levels/test_movement.glb".into(),
                 map_scene_root: None,
             })
+            .add_systems(Startup, player::player_init)
             .add_systems(Update, map::map_init)
+            .add_systems(PostUpdate, map::attach_colliders)
             .run(),
         Command::Update => {
             let status = self_update::backends::github::Update::configure()
