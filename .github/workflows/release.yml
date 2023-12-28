@@ -23,6 +23,18 @@ jobs:
         shell: bash
         run: gh release create ${{ github.ref_name }} -d
 
+      - name: Set version
+        shell: bash
+        run: sed -i '0,/dependencies/ s/version = ".*"/version = "${{ github.ref_name }}"/' Cargo.toml
+
+      - name: Commit changes
+        shell: bash
+        run: |
+          git config --global user.name 'Chay Nabors'
+          git config --global user.email 'chaynabors@users.noreply.github.com'
+          git commit -am "bump version"
+          git push
+
   build-and-upload:
     name: Build ${{ matrix.name }}
     needs: create-release
@@ -48,10 +60,6 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
-      - name: Set version
-        shell: bash
-        run: sed -i '0,/dependencies/ s/version = ".*"/version = "${{ github.ref_name }}"/' Cargo.toml
 
       - name: Install toolchain
         run: |
@@ -81,15 +89,3 @@ jobs:
       - name: Publish release
         shell: bash
         run: gh release edit ${{ github.ref_name }} --draft=false
-
-      - name: Set version
-        shell: bash
-        run: sed -i '0,/dependencies/ s/version = ".*"/version = "${{ github.ref_name }}"/' Cargo.toml
-        
-      - name: Commit changes
-        shell: bash
-        run: |
-          git config --global user.name 'Chay Nabors'
-          git config --global user.email 'chaynabors@users.noreply.github.com'
-          git commit -am "bump version"
-          git push
